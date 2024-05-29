@@ -8,7 +8,7 @@ const {
   deleteCategory
 } = require('../repositories/category.repo')
 const { BadRequestError, NotFoundError, MethodFailureError } = require('../core/error.response')
-const { isValidObjectId } = require('../utils/index')
+const { isValidObjectId, removeUndefinedObject } = require('../utils/index')
 
 class CategoryService {
   static async getAllCategories() {
@@ -34,9 +34,9 @@ class CategoryService {
       throw new BadRequestError('categoryData is required')
     }
 
-    const { name } = categoryData
-    if (!name) {
-      throw new BadRequestError('name is required')
+    const { name, image, color } = categoryData
+    if (!name || !image || !color) {
+      throw new BadRequestError('name, image, color is required')
     }
     const category = await addCategory({ categoryData })
     if (!category) {
@@ -55,7 +55,12 @@ class CategoryService {
     if (!bodyUpdate) {
       throw new BadRequestError('bodyUpdate is required')
     }
-    const category = await updateCategory({ categoryId, bodyUpdate })
+
+    const objectParams = removeUndefinedObject(bodyUpdate)
+    if (Object.keys(objectParams).length === 0) {
+      throw new BadRequestError('Body update is empty')
+    }
+    const category = await updateCategory({ categoryId, bodyUpdate: objectParams })
     if (!category) {
       throw new MethodFailureError('Update category failed')
     }

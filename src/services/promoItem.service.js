@@ -7,7 +7,7 @@ const {
   deletePromoItem
 } = require('../repositories/promoItem.repo')
 const { BadRequestError, NotFoundError, MethodFailureError } = require('../core/error.response')
-const { isValidObjectId } = require('../utils/index')
+const { isValidObjectId, removeUndefinedObject } = require('../utils/index')
 
 class PromoItemService {
   static async getAllPromoItems() {
@@ -54,7 +54,13 @@ class PromoItemService {
     if (!bodyUpdate) {
       throw new BadRequestError('bodyUpdate is required')
     }
-    const promoItem = await updatePromoItem({ promoId, bodyUpdate })
+
+    const objectParams = removeUndefinedObject(bodyUpdate)
+    if (Object.keys(objectParams).length === 0) {
+      throw new BadRequestError('Body update is empty')
+    }
+
+    const promoItem = await updatePromoItem({ promoId, bodyUpdate: objectParams })
     if (!promoItem) {
       throw new MethodFailureError('Update promo item failed')
     }

@@ -9,7 +9,7 @@ const {
 } = require('../repositories/order.repo')
 const { addOrderItem } = require('../services/orderItem.service')
 const { BadRequestError, NotFoundError, MethodFailureError } = require('../core/error.response')
-const { isValidObjectId } = require('../utils/index')
+const { isValidObjectId, removeUndefinedObject } = require('../utils/index')
 
 class OrderService {
   static async getAllOrders() {
@@ -94,7 +94,13 @@ class OrderService {
     if (!isValidObjectId(orderId)) {
       throw new BadRequestError('Invalid orderId')
     }
-    const order = await updateOrder({ orderId, bodyUpdate })
+
+    const objectParams = removeUndefinedObject(bodyUpdate)
+    if (Object.keys(objectParams).length === 0) {
+      throw new BadRequestError('Body update is empty')
+    }
+
+    const order = await updateOrder({ orderId, bodyUpdate: objectParams })
     if (!order) {
       throw new MethodFailureError('Update order failed')
     }

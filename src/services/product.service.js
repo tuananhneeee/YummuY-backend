@@ -8,7 +8,7 @@ const {
   deleteProduct
 } = require('../repositories/product.repo')
 const { BadRequestError, NotFoundError, MethodFailureError } = require('../core/error.response')
-const { isValidObjectId } = require('../utils/index')
+const { isValidObjectId, removeUndefinedObject } = require('../utils/index')
 
 class ProductService {
   static async getAllProducts() {
@@ -73,7 +73,13 @@ class ProductService {
     if (!isValidObjectId(productId)) {
       throw new BadRequestError('Invalid productId')
     }
-    const product = await updateProduct({ productId, bodyUpdate })
+
+    const objectParams = removeUndefinedObject(bodyUpdate)
+    if (Object.keys(objectParams).length === 0) {
+      throw new BadRequestError('Body update is empty')
+    }
+    
+    const product = await updateProduct({ productId, bodyUpdate: objectParams })
     if (!product) {
       throw new MethodFailureError('Update product failed')
     }
