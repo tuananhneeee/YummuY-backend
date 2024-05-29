@@ -1,9 +1,20 @@
 const { Types } = require('mongoose')
-const { addOrderItem } = require('../repositories/orderItem.repo')
+const { addOrderItem, getAllOrdersItemByOrderId } = require('../repositories/orderItem.repo')
 const { BadRequestError, MethodFailureError } = require('../core/error.response')
 const { isValidObjectId } = require('../utils/index')
 
 class OrderItemService {
+  static async getAllOrdersItemByOrderId({ orderId }) {
+    if (!orderId) {
+      throw new BadRequestError('orderId is required')
+    }
+    if (!isValidObjectId(orderId)) {
+      throw new BadRequestError('Invalid orderId')
+    }
+    const orderItems = await getAllOrdersItemByOrderId({ orderId })
+    return orderItems
+  }
+  
   static async addOrderItem({ orderItemData }) {
     if (!orderItemData) {
       throw new BadRequestError('orderItemData is required')

@@ -2,15 +2,21 @@ const { order } = require('../models/order.model')
 const { Types } = require('mongoose')
 
 const getAllOrders = async () => {
-  return await order.find({ isDeleted: false }).exec()
+  return await order.find({ isDeleted: false })
+  .populate('user')
+  .exec()
 }
 
 const getOrderById = async ({ orderId }) => {
-  return await order.findOne({ _id: new Types.ObjectId(orderId) }).exec()
+  return await order.findOne({ _id: new Types.ObjectId(orderId) })
+  .populate('user')
+  .exec()
 }
 
 const getOrderByUserId = async ({ userId }) => {
-  return await order.find({ user: new Types.ObjectId(userId) }).exec()
+  return await order.find({ user: new Types.ObjectId(userId) })
+  .populate('user')
+  .exec()
 }
 
 const addOrder = async ({ orderData }) => {

@@ -2,15 +2,21 @@ const { product } = require('../models/product.model')
 const { Types } = require('mongoose')
 
 const getAllProducts = async () => {
-  return await product.find({ isDeleted: false }).exec()
+  return await product.find({ isDeleted: false })
+  .populate('category')
+  .exec()
 }
 
 const getProductByProductId = async ({ productId }) => {
-  return await product.findOne({ _id: new Types.ObjectId(productId) }).exec()
+  return await product.findOne({ _id: new Types.ObjectId(productId) })
+  .populate('category')
+  .exec()
 }
 
 const getProductByCategory = async ({ categoryId }) => {
-  return await product.find({ category: new Types.ObjectId(categoryId) }).exec()
+  return await product.find({ category: new Types.ObjectId(categoryId) })
+  .populate('category')
+  .exec()
 }
 
 const addProduct = async ({ productData }) => {

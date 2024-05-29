@@ -24,10 +24,14 @@ class OrderService {
       throw new BadRequestError('Invalid orderId')
     }
     const order = await getOrderById({ orderId })
+    const orderItems = await getAllOrdersItemByOrderId({ orderId })
     if (!order) {
       throw new NotFoundError('Order not found')
     }
-    return order
+    return {
+      order,
+      orderItems
+    }
   }
 
   static async getOrderByUserId({ userId }) {
@@ -38,7 +42,15 @@ class OrderService {
       throw new BadRequestError('Invalid userId')
     }
     const orders = await getOrderByUserId({ userId })
-    return orders
+    const ordersWithItems = []
+    for (const order of orders) {
+      const orderItems = await getAllOrdersItemByOrderId({ orderId: order._id.toString() })
+      ordersWithItems.push({
+        order,
+        orderItems
+      })
+    } 
+    return ordersWithItems
   }
 
   static async addOrder({ orderData, userId }) {
