@@ -1,0 +1,50 @@
+{
+  "name": "nodejs-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,html}\"",
+    "lint:prettier": "prettier --check \"**/**/*.{js,jsx,ts,tsx,css,html}\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@thirdweb-dev/sdk": "^4.0.42",
+    "axios": "^1.6.7",
+    "bcrypt": "^5.1.1",
+    "cloudinary": "^2.0.1",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.3.1",
+    "eslint": "^8.56.0",
+    "ethers": "^5.7.2",
+    "express": "^4.18.2",
+    "faker": "^6.6.6",
+    "image-hash": "^5.3.2",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "md5": "^2.3.0",
+    "mongoose": "^8.0.3",
+    "mongoose-delete": "^1.0.2",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^6.9.10",
+    "nodemon": "^3.0.2",
+    "slugify": "^1.6.6"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.3.1",
+    "compression": "^1.7.4",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "prettier": "3.1.1"
+  }
+}
