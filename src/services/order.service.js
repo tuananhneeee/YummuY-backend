@@ -79,7 +79,8 @@ class OrderService {
         orderItemData: {
           orderId: order._id.toString(),
           productId: orderItem.productId,
-          quantity: orderItem.quantity
+          quantity: orderItem.quantity,
+          table: orderItem.table
         }
       })
     }

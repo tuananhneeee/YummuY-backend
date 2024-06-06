@@ -20,9 +20,9 @@ class OrderItemService {
       throw new BadRequestError('orderItemData is required')
     }
 
-    const { orderId, productId, quantity } = orderItemData
-    if (!orderId || !productId || !quantity) {
-      throw new BadRequestError('orderId, productId, and quantity are required')
+    const { orderId, productId, quantity, table } = orderItemData
+    if (!orderId || !productId || !quantity || !table) {
+      throw new BadRequestError('orderId, productId, table and quantity are required')
     }
     if (!isValidObjectId(orderId) || !isValidObjectId(productId)) {
       throw new BadRequestError('Invalid orderId or productId')
@@ -31,7 +31,8 @@ class OrderItemService {
       orderItemData: {
         order: new Types.ObjectId(orderId),
         product: new Types.ObjectId(productId),
-        quantity
+        quantity,
+        table
       }
     })
     if (!orderItem) {

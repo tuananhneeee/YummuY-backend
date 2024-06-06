@@ -8,6 +8,7 @@ const OrderSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     totalPrice: Number,
+    status: String,
     createdAtTime: Date,
     isDeleted: { type: Boolean, default: false },
     deletedAt: Date
