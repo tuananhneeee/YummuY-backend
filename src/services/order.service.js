@@ -7,9 +7,10 @@ const {
   updateOrder,
   deleteOrder
 } = require('../repositories/order.repo')
-const { addOrderItem } = require('../services/orderItem.service')
+const { addOrderItem, getAllOrdersItemByOrderId } = require('../services/orderItem.service')
 const { BadRequestError, NotFoundError, MethodFailureError } = require('../core/error.response')
 const { isValidObjectId, removeUndefinedObject } = require('../utils/index')
+const { getProductByProductId } = require('../services/product.service')
 
 class OrderService {
   static async getAllOrders() {
@@ -64,11 +65,17 @@ class OrderService {
       throw new BadRequestError('orderData is required')
     }
 
-    const { orderItems, totalPrice } = orderData
-    if (!orderItems || !totalPrice) {
-      throw new BadRequestError('orderItems, totalPrice are required')
+    const { orderItems } = orderData
+    if (!orderItems) {
+      throw new BadRequestError('orderItems are required')
     }
-    orderData.user = new Types.ObjectId(userId)
+    let totalPrice = 0
+    for (const orderItem of orderItems) {
+      let productId = orderItem.productId
+      let product = await getProductByProductId({productId})
+      let price = product.price
+      totalPrice += price
+    } 
     const order = await addOrder({ orderData: {
       status: "waiting", 
       user: new Types.ObjectId(userId),
