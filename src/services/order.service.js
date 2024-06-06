@@ -69,7 +69,12 @@ class OrderService {
       throw new BadRequestError('orderItems, totalPrice, and createdAtTime are required')
     }
     orderData.user = new Types.ObjectId(userId)
-    const order = await addOrder({ orderData })
+    const order = await addOrder({ orderData: {
+      status: "waiting", 
+      user: new Types.ObjectId(userId),
+      totalPrice, 
+      createdAtTime
+    } })
     if (!order) {
       throw new MethodFailureError('Add order failed')
     }
